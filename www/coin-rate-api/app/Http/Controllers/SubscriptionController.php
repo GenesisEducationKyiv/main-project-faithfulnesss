@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 
 use App\Models\Subscription;
 use App\Notifications\CoinRateNotification;
-use App\Services\CoinRateService;
+use App\Services\CoinRateServiceInterface;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,10 +25,10 @@ class SubscriptionController extends Controller
     /**
      * SubscriptionController constructor.
      *
-     * @param CoinRateService $coinRateService The CoinRateService instance 
-     *                                         from which we fetch current rate
+     * @param CoinRateServiceInterface $coinRateService 
+     * The CoinRateServiceInterface instance from which we fetch current rate
      */
-    public function __construct(CoinRateService $coinRateService)
+    public function __construct(CoinRateServiceInterface $coinRateService)
     {
         $this->coinRateService = $coinRateService;
     }
@@ -80,7 +80,7 @@ class SubscriptionController extends Controller
     public function sendEmails()
     {
         // Get the current rate from the service
-        $rate = $this->coinRateService->getRate();
+        $rate = $this->coinRateService->getRate('BTC', 'UAH');
 
         // Load the subscriptions from storage
         $subscriptions = Subscription::loadSubscriptions();

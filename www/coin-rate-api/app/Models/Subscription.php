@@ -66,6 +66,8 @@ class Subscription extends Model
     {
         // Save the collection of Subscription model objects as a JSON
         // in the subscription.json file
+        // return Storage::put(Config::get('database.file_storage.name'), $subscriptions->toJson());
         return Storage::put('subscriptions.json', $subscriptions->toJson());
+    
     }    
 }
