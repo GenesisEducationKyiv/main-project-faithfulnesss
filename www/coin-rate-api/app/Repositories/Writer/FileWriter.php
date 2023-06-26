@@ -19,8 +19,6 @@ class FileWriter implements WriterInterface {
     /**
      * Write the subscriptions to the file destination.
      *
-     * @param Collection $subscriptions
-     * @return bool
      */
     public function write(Collection $subscriptions): bool
     {

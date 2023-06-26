@@ -9,8 +9,6 @@ interface WriterInterface
     /**
      * Write the subscriptions to the destination.
      *
-     * @param Collection $subscriptions
-     * @return bool
      */
     public function write(Collection $subscriptions): bool;
 }

@@ -20,7 +20,6 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
     /**
      * Get all subscriptions.
      *
-     * @return Collection
      */
     public function all(): Collection
     {
@@ -30,8 +29,6 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
     /**
      * Save the given subscriptions.
      *
-     * @param Collection $subscriptions
-     * @return bool
      */
     public function save(Collection $subscriptions): bool
     {

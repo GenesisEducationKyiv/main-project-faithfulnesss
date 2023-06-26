@@ -11,28 +11,28 @@ class Subscription
     public $email;
     public $subscriptionDate;
 
-    public function __construct($email, $subscriptionDate)
+    public function __construct(string $email, string $subscriptionDate)
     {
         $this->email = $email;
         $this->subscriptionDate = $subscriptionDate;
     }
 
-    public function getEmail()
+    public function getEmail() : string
     {
         return $this->email;
     }
 
-    public function getSubscriptionDate()
+    public function getSubscriptionDate() : string
     {
         return $this->subscriptionDate;
     }
 
-    public function setEmail($email)
+    public function setEmail(string $email) : void
     {
         $this->email = $email;
     }
 
-    public function setSubscriptionDate($subscriptionDate)
+    public function setSubscriptionDate(string $subscriptionDate) : void
     {
         $this->subscriptionDate = $subscriptionDate;
     }
