@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Services\Utilities\Currencies;
+
 interface CoinRateServiceInterface 
 {
 
-    public function getRate(string $from, string $to);
+    public function getRate(Currencies $from, Currencies $to) : float;
 
 }

@@ -7,12 +7,13 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-use App\Models\Subscription;
 use App\Notifications\CoinRateNotification;
 use App\Services\CoinRateServiceInterface;
+use App\Repositories\SubscriptionRepositoryInterface;
+use App\Entities\Subscription;
+use App\Services\Utilities\Currencies;
 
 use Symfony\Component\HttpFoundation\Response;
-
 
 /**
  * SubscriptionController
@@ -21,25 +22,17 @@ class SubscriptionController extends Controller
 {
 
     private $coinRateService;
+    private $subscriptionRepository;
 
-    /**
-     * SubscriptionController constructor.
-     *
-     * @param CoinRateServiceInterface $coinRateService 
-     * The CoinRateServiceInterface instance from which we fetch current rate
-     */
-    public function __construct(CoinRateServiceInterface $coinRateService)
-    {
+    public function __construct(
+        CoinRateServiceInterface $coinRateService,
+        SubscriptionRepositoryInterface $subscriptionRepository
+    ) {
         $this->coinRateService = $coinRateService;
+        $this->subscriptionRepository = $subscriptionRepository;
     }
     
-    /**
-     * Store a new subscription.
-     *
-     * @param  Request $request The request object
-     * @return JsonResponse The JSON response
-     */
-    public function store(Request $request)
+    public function store(Request $request) : JsonResponse
     {    
         // Validate whether the email is valid
         $validator = Validator::make(
@@ -53,39 +46,34 @@ class SubscriptionController extends Controller
             return response()->json(['msg' => 'Failed email validation',], Response::HTTP_CONFLICT);
         }
 
-        // Load subscriptions from storage
-        $subscriptions = Subscription::loadSubscriptions();
+        // Load subscriptions from source
+        $subscriptions = $this->subscriptionRepository->all();
 
         // Get the email from the request
         $email = $request->input('email');
 
-        // Check if the email is already present in the subscriptions.json
+        // Check if the email is already present in the source
         if ($subscriptions->contains('email', $email)) {
             return response()->json(['msg' => 'Email is already present',], Response::HTTP_CONFLICT);
         }  
 
-        // Create a new Subscription instance and push it in the subscription.json
-        $subscription = new Subscription(['email' => $email, 'subscription_date' => date("Y-m-d")]);
+        // Create a new Subscription instance and push it in the source
+        $subscription = new Subscription($email, date("Y-m-d"));
         
-        Subscription::saveSubscriptions($subscriptions->push($subscription));
+        $this->subscriptionRepository->save($subscriptions->push($subscription));
 
         return response()->json(['msg' => 'Email successfully created'], Response::HTTP_CREATED);
     }
     
-    /**
-     * Send emails to all subscribers.
-     *
-     * @return JsonResponse The JSON response
-     */
-    public function sendEmails()
+    public function sendEmails() : JsonResponse
     {
         // Get the current rate from the service
-        $rate = $this->coinRateService->getRate('BTC', 'UAH');
+        $rate = $this->coinRateService->getRate(Currencies::BTC, Currencies::UAH);
 
         // Load the subscriptions from storage
-        $subscriptions = Subscription::loadSubscriptions();
+        $subscriptions = $this->subscriptionRepository->all();
         
-        // Send notifications to all emails that are present inside the subscriptions.json file
+        // Send notifications to all emails that are present inside the source
         // with the current coin rate using Notification facade    
         Notification::send($subscriptions, new CoinRateNotification($rate));
 
