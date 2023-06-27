@@ -12,6 +12,7 @@ use App\Services\CoinRateServiceInterface;
 use App\Repositories\SubscriptionRepositoryInterface;
 use App\Entities\Subscription;
 use App\Services\Utilities\Currencies;
+use App\Http\Requests\StoreSubscriptionRequest;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,31 +22,13 @@ use Symfony\Component\HttpFoundation\Response;
 class SubscriptionController extends Controller
 {
 
-    private $coinRateService;
-    private $subscriptionRepository;
-
     public function __construct(
-        CoinRateServiceInterface $coinRateService,
-        SubscriptionRepositoryInterface $subscriptionRepository
-    ) {
-        $this->coinRateService = $coinRateService;
-        $this->subscriptionRepository = $subscriptionRepository;
-    }
+        protected CoinRateServiceInterface $coinRateService,
+        protected SubscriptionRepositoryInterface $subscriptionRepository
+    ) { }
     
-    public function store(Request $request) : JsonResponse
+    public function store(StoreSubscriptionRequest $request) : JsonResponse
     {    
-        // Validate whether the email is valid
-        $validator = Validator::make(
-            $request->all(), [
-            'email' => 'required|email',
-            ]
-        );
-
-        // Return a conflict response if email is not valid
-        if ($validator->fails()) {
-            return response()->json(['msg' => 'Failed email validation',], Response::HTTP_CONFLICT);
-        }
-
         // Load subscriptions from source
         $subscriptions = $this->subscriptionRepository->all();
 
@@ -53,7 +36,7 @@ class SubscriptionController extends Controller
         $email = $request->input('email');
 
         // Check if the email is already present in the source
-        if ($subscriptions->contains('email', $email)) {
+        if ($this->subscriptionRepository->exists($email)) {
             return response()->json(['msg' => 'Email is already present',], Response::HTTP_CONFLICT);
         }  
 

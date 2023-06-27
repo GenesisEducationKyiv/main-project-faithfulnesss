@@ -46,7 +46,6 @@ class CoinMarketCapRateService implements CoinRateServiceInterface
         // Access the necessary data in the response to retrieve the coin rate
         // If the @json_decode fails or the necessary data is not available 
         // set the rate to null
-
         $rate = $data['data'][$from->value]['quote'][$to->value]['price'] ?? null;
 
         return $rate;

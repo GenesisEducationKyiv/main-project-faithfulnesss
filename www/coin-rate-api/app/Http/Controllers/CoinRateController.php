@@ -14,12 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 */
 class CoinRateController extends Controller
 {
-    private $coinRateService;
-    
-    public function __construct(CoinRateServiceInterface $coinRateService)
-    {
-        $this->coinRateService = $coinRateService;
-    }
+
+    public function __construct(private CoinRateServiceInterface $coinRateService) { }
         
     public function getRate() : JsonResponse
     {
