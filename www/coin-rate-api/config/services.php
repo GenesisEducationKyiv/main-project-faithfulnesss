@@ -32,7 +32,12 @@ return [
     ],
 
     'cmp' => [
-        'token' => env('COINMARKETCAP_KEY')
-    ]
+        'token' => env('COINMARKETCAP_KEY'),
+        'api_uri' => 'https://pro-api.coinmarketcap.com/v1/'
+    ],
 
+    'cmp_testing' => [
+        'token' => env('COINMARKETCAP_SANDBOX_KEY'),
+        'api_uri' => 'https://sandbox-api.coinmarketcap.com/v1/'
+    ]
 ];

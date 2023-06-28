@@ -6,7 +6,7 @@ use Illuminate\Http\JsonResponse;
 
 use Symfony\Component\HttpFoundation\Response;
 
-use App\Services\CoinRateService;
+use App\Services\CoinRateServiceInterface;
 
     /**
      * Class CoinRateController
@@ -18,10 +18,10 @@ class CoinRateController extends Controller
     /**
      * CoinRateController constructor.
      *
-     * @param CoinRateService $coinRateService parameter is typehinted with the CoinRateService class
+     * @param CoinRateServiceInterface $coinRateService parameter is typehinted with the CoinRateService class
      */
 
-    public function __construct(CoinRateService $coinRateService)
+    public function __construct(CoinRateServiceInterface $coinRateService)
     {
         $this->coinRateService = $coinRateService;
     }
@@ -34,7 +34,7 @@ class CoinRateController extends Controller
     public function getRate()
     {
         // Call the CoinRateService to retrieve the current BTC-UAH rate
-        $rate = $this->coinRateService->getRate();
+        $rate = $this->coinRateService->getRate('BTC', 'UAH');
 
         // If the rate is empty or unavailable, return an error response
         if(empty($rate)) {

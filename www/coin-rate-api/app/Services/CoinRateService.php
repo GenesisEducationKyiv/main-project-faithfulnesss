@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Config;
  *
  * Service class for retrieving coin rate from a third-party API (in this case CoinMarketCap API).
  */
-class CoinRateService
+class CoinRateService implements CoinRateServiceInterface
 {
     protected $apiKey;
     protected $apiUri;
@@ -23,7 +23,7 @@ class CoinRateService
     public function __construct()
     {
         $this->apiKey = Config::get('services.cmp.token');
-        $this->apiUri = 'https://pro-api.coinmarketcap.com/v1/';
+        $this->apiUri = Config::get('services.cmp.api_uri'); 
     }
     
     /**
@@ -31,7 +31,7 @@ class CoinRateService
      *
      * @return float|null The current coin rate, or null if it cannot be retrieved.
      */
-    public function getRate()
+    public function getRate(string $from, string $to)
     {
         // Send a GET request to the third-party API endpoint with the required auth header 
         // and parameters for BTC-UAH rate
@@ -41,8 +41,8 @@ class CoinRateService
             ]
         )->get(
             $this->apiUri . 'cryptocurrency/quotes/latest', [
-                'symbol' => 'BTC',
-                'convert' => 'UAH',
+                'symbol' => $from,
+                'convert' => $to,
                 ]
         );
     
@@ -53,7 +53,7 @@ class CoinRateService
         // Access the necessary data in the response to retrieve the coin rate
         // If the @json_decode fails or the necessary data is not available 
         // set the rate to null
-        $rate = $data['data']['BTC']['quote']['UAH']['price'] ?? null;
+        $rate = $data['data'][$from]['quote'][$to]['price'] ?? null;
 
         return $rate;
     }
