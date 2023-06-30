@@ -9,7 +9,7 @@ use App\Entities\Subscription;
 
 class FileWriter implements WriterInterface {
     
-    private string $path;
+    private $path;
 
     public function __construct(string $path)
     {

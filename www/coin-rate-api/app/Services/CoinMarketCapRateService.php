@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Http\Client\Response;
 
 use App\Services\Utilities\Currencies;
 
@@ -24,28 +23,7 @@ class CoinMarketCapRateService implements CoinRateServiceInterface
         $this->apiUri = Config::get('services.cmp.api_uri');
     }
 
-    public function getRate(Currencies $from, Currencies $to): ?float 
-    {
-        $response = $this->makeRequest($from, $to);
-
-        return $this->decodeResponse($response, $from, $to);
-    }
-
-    public function decodeResponse(Response $response, Currencies $from, Currencies $to): ?float 
-    {
-        // Extract the response body and decode it from JSON
-        // $data = @json_decode($response->json(), true);
-        $data = $response->json();
-
-        // Access the necessary data in the response to retrieve the coin rate
-        // If the @json_decode fails or the necessary data is not available 
-        // set the rate to null
-        $rate = $data['data'][$from->value]['quote'][$to->value]['price'] ?? null;
-
-        return $rate;
-    }
-
-    public function makeRequest(Currencies $from, Currencies $to): Response 
+    public function getRate(Currencies $from, Currencies $to): float
     {
         // Send a GET request to the third-party API endpoint with the required auth header 
         // and parameters for BTC-UAH rate
@@ -61,6 +39,15 @@ class CoinMarketCapRateService implements CoinRateServiceInterface
             ]
         );
 
-        return $response;
+        // Extract the response body and decode it from JSON
+        // $data = @json_decode($response->json(), true);
+        $data = $response->json();
+
+        // Access the necessary data in the response to retrieve the coin rate
+        // If the @json_decode fails or the necessary data is not available 
+        // set the rate to null
+        $rate = $data['data'][$from->value]['quote'][$to->value]['price'] ?? null;
+
+        return $rate;
     }
 }
