@@ -6,5 +6,4 @@ enum Currencies: string
 {
     case BTC = 'BTC';
     case UAH = 'UAH';
-    case TEST = 'TEST';
 }
