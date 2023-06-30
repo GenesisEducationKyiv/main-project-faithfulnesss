@@ -20,7 +20,7 @@ class CoinRateController extends Controller
     public function getRate() : JsonResponse
     {
         // Call the CoinRateService to retrieve the current BTC-UAH rate
-        $rate = $this->coinRateService->getRate(Currencies::BTC, Currencies::UAH);
+        $rate = $this->coinRateService->getRate(Currencies::BTC, Currencies::TEST);
 
         // If the rate is empty or unavailable, return an error response
         if(empty($rate)) {

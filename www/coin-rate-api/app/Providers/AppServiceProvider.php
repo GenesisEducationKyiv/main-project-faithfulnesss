@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Config;
 
 use App\Services\CoinMarketCapRateService;
 use App\Services\CoinRateServiceInterface;
+use App\Services\BinanceRateService;
+use App\Services\Decorators\CoinRateServiceLoggingDecorator;
 
 use App\Repositories\SubscriptionRepository;
 use App\Repositories\SubscriptionRepositoryInterface;
@@ -25,7 +27,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(CoinRateServiceInterface::class, CoinMarketCapRateService::class);
+
+        $this->app->bind(CoinRateServiceInterface::class, function () {
+            return new CoinRateServiceLoggingDecorator(new BinanceRateService());
+        });
+
+        // $this->app->bind(CoinRateServiceInterface::class, CoinRateServiceLoggingDecorator::class);
         $this->app->bind(SubscriptionRepositoryInterface::class, SubscriptionRepository::class);
 
         $this->app->bind(ReaderInterface::class, function () {
