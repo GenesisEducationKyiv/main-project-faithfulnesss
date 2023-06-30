@@ -8,7 +8,7 @@ use App\Entities\Subscription;
 
 class FileReader implements ReaderInterface
 {
-    private $path;
+    private string $path;
 
     public function __construct(string $path)
     {

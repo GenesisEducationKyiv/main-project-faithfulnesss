@@ -13,7 +13,7 @@ class CoinRateNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public $rate;
+    public ?float $rate;
 
     public function __construct($rate)
     {

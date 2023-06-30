@@ -23,8 +23,8 @@ class SubscriptionController extends Controller
 {
 
     public function __construct(
-        protected CoinRateServiceInterface $coinRateService,
-        protected SubscriptionRepositoryInterface $subscriptionRepository
+        private CoinRateServiceInterface $coinRateService,
+        private SubscriptionRepositoryInterface $subscriptionRepository
     ) { }
     
     public function store(StoreSubscriptionRequest $request) : JsonResponse

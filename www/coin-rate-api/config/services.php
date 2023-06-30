@@ -39,5 +39,9 @@ return [
     'cmp_testing' => [
         'token' => env('COINMARKETCAP_SANDBOX_KEY'),
         'api_uri' => 'https://sandbox-api.coinmarketcap.com/v1/'
-    ]
+    ],
+
+    'binance' => [
+        'api_uri' => 'https://api.binance.com/api/v3/ticker/price'
+    ],
 ];
