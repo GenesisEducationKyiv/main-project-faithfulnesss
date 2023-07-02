@@ -6,20 +6,21 @@ use App\Services\CoinRateServiceInterface;
 use App\Services\Utilities\Currencies;
 
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Log;
 
 class CoinRateServiceBaseDecorator implements CoinRateServiceInterface
 {
+    protected $serviceName;
+
     public function __construct(private CoinRateServiceInterface $service)
     {
+        $service_class_name = get_class($service);
+
+        $this->serviceName = substr($service_class_name , 0, strpos($service_class_name , "Rate"));
     }
 
     public function getRate(Currencies $from, Currencies $to) : ?float 
     {
-        $response = $this->service->makeRequest($from, $to);
-
-        return $this->service->decodeResponse($response, $from, $to);
-
+        return $this->service->getRate($from, $to);
     }
 
     public function decodeResponse(Response $response, Currencies $from, Currencies $to) : ?float

@@ -9,6 +9,8 @@ use App\Services\CoinMarketCapRateService;
 use App\Services\CoinRateServiceInterface;
 use App\Services\BinanceRateService;
 use App\Services\Decorators\CoinRateServiceLoggingDecorator;
+use App\Services\Chain\CoinRateServicesHandler;
+use App\Services\Chain\CoinRateServicesHandlerInterface;
 
 use App\Repositories\SubscriptionRepository;
 use App\Repositories\SubscriptionRepositoryInterface;
@@ -28,11 +30,16 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
 
-        $this->app->bind(CoinRateServiceInterface::class, function () {
-            return new CoinRateServiceLoggingDecorator(new BinanceRateService());
-        });
+        $this->app->bind(CoinRateServicesHandlerInterface::class, function () {
+            $coinMarketCapLoggedService = new CoinRateServiceLoggingDecorator(new CoinMarketCapRateService());
+            $binanceLoggedService = new CoinRateServiceLoggingDecorator(new BinanceRateService());
 
-        // $this->app->bind(CoinRateServiceInterface::class, CoinRateServiceLoggingDecorator::class);
+            $handler = new CoinRateServicesHandler($coinMarketCapLoggedService);
+            $handler->setNext(new CoinRateServicesHandler($binanceLoggedService));
+        
+            return $handler;
+        });
+        
         $this->app->bind(SubscriptionRepositoryInterface::class, SubscriptionRepository::class);
 
         $this->app->bind(ReaderInterface::class, function () {

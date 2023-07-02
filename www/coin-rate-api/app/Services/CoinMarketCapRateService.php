@@ -4,14 +4,10 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Http\Client\Response;
 
 use App\Services\Utilities\Currencies;
 
-/**
- * Class CoinMarketCapRateService
- *
- * Service class for retrieving coin rate from a third-party API (in this case CoinMarketCap API).
- */
 class CoinMarketCapRateService implements CoinRateServiceInterface
 {
     private $apiKey;
