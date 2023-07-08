@@ -13,9 +13,9 @@ class CoinRateServiceBaseDecorator implements CoinRateServiceInterface
 
     public function __construct(private CoinRateServiceInterface $service)
     {
-        $service_class_name = get_class($service);
+        $serviceClassName = get_class($service);
 
-        $this->serviceName = substr($service_class_name , 0, strpos($service_class_name , "Rate"));
+        $this->serviceName = substr($serviceClassName , 0, strpos($serviceClassName , "Rate"));
     }
 
     public function getRate(Currencies $from, Currencies $to) : ?float 
