@@ -17,7 +17,8 @@ abstract class AbstractCoinRateServicesHandler implements CoinRateServicesHandle
 
     public function getRate(Currencies $from, Currencies $to): ?float
     {
-        if ($this->nextHandler) {
+        if ($this->nextHandler) 
+        {
             return $this->nextHandler->getRate($from, $to);
         }
 

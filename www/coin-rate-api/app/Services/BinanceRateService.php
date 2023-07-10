@@ -17,14 +17,14 @@ class BinanceRateService implements CoinRateServiceInterface
         $this->apiUri = Config::get('services.binance.api_uri');
     }
 
-    public function getRate(Currencies $from, Currencies $to): ?float 
+    public function getRate(Currencies $from, Currencies $to): ?float
     {
         $response = $this->makeRequest($from, $to);
 
         return $this->decodeResponse($response, $from, $to);
     }
 
-    public function decodeResponse(Response $response, Currencies $from, Currencies $to): ?float 
+    public function decodeResponse(Response $response, Currencies $from, Currencies $to): ?float
     {
         $data = $response->json();
 
@@ -33,7 +33,7 @@ class BinanceRateService implements CoinRateServiceInterface
         return $rate;
     }
 
-    public function makeRequest(Currencies $from, Currencies $to): Response 
+    public function makeRequest(Currencies $from, Currencies $to): Response
     {
         $response = Http::get($this->apiUri, ['symbol' => $from->value . $to->value]);
 

@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use App\Entities\Subscription;
 
-class FileWriter implements WriterInterface {
-    
+class FileWriter implements WriterInterface
+{
+
     private string $path;
 
     public function __construct(string $path)
     {
         $this->path = $path;
     }
-    
+
     /**
      * Write the subscriptions to the file destination.
      *

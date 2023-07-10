@@ -9,14 +9,14 @@ class CoinRateServicesHandler extends AbstractCoinRateServicesHandler
 {
 
     public function __construct(private CoinRateServiceInterface $service)
-    {
-    }
+    { }
 
-    public function getRate(Currencies $from, Currencies $to) : ?float {
-        
+    public function getRate(Currencies $from, Currencies $to) : ?float 
+    {    
         $request = $this->service->makeRequest($from, $to); 
 
-        if($request->status() === 200){
+        if($request->status() === 200)
+        {
             return $this->service->decodeResponse($request, $from, $to);
         }
 

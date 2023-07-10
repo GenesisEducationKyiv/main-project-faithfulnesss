@@ -22,7 +22,7 @@ class StoreSubscriptionRequest extends FormRequest
         ];
     }
 
-    protected function failedValidation(Validator $validator) : JsonResponse
+    protected function failedValidation(Validator $validator): JsonResponse
     {
         throw new HttpResponseException(
             response()->json(['msg' => 'Failed email validation'], Response::HTTP_CONFLICT)

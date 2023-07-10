@@ -18,7 +18,7 @@ class FileReader implements ReaderInterface
     /**
      * Read the subscriptions from the source.
      *
-     */    
+     */
     public function read(): Collection
     {
         // Read the contents of the source file using Storage facade

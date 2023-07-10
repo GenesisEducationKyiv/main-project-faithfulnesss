@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CoinRateController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\MailingController;
 
 
 /*
@@ -26,4 +27,4 @@ Route::get('/rate', [CoinRateController::class, 'getRate']);
 
 Route::post('/subscribe', [SubscriptionController::class, 'store']);
 
-Route::post('/sendEmails', [SubscriptionController::class, 'sendEmails']);
+Route::post('/sendEmails', [MailingController::class, 'sendEmails']);

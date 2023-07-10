@@ -21,6 +21,11 @@ use App\Repositories\Reader\ReaderInterface;
 use App\Repositories\Writer\FileWriter;
 use App\Repositories\Writer\WriterInterface;
 
+use App\Services\Loggers\FileLogger;
+use App\Services\Loggers\LoggerInterface;
+
+use App\Services\Mailing\MailingServiceInterface;
+use App\Services\Mailing\MailingService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,33 +36,31 @@ class AppServiceProvider extends ServiceProvider
     {
 
         $this->app->bind(CoinRateServicesHandlerInterface::class, function () {
-            $coinMarketCapLoggedService = new CoinRateServiceLoggingDecorator(new CoinMarketCapRateService());
-            $binanceLoggedService = new CoinRateServiceLoggingDecorator(new BinanceRateService());
+
+            $logger = new FileLogger();
+
+            $coinMarketCapLoggedService = new CoinRateServiceLoggingDecorator($logger, new CoinMarketCapRateService());
+            $binanceLoggedService = new CoinRateServiceLoggingDecorator($logger, new BinanceRateService());
 
             $handler = new CoinRateServicesHandler($coinMarketCapLoggedService);
             $handler->setNext(new CoinRateServicesHandler($binanceLoggedService));
-        
+
             return $handler;
         });
-        
+
         $this->app->bind(SubscriptionRepositoryInterface::class, SubscriptionRepository::class);
 
+        $this->app->bind(MailingServiceInterface::class, MailingService::class);
+
+
         $this->app->bind(ReaderInterface::class, function () {
-            $path = Config::get('database.file_storage.path');             
+            $path = Config::get('database.file_storage.path');
             return new FileReader($path);
         });
 
         $this->app->bind(WriterInterface::class, function () {
-            $path = Config::get('database.file_storage.path');             
+            $path = Config::get('database.file_storage.path');
             return new FileWriter($path);
-        });    
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        //
+        });
     }
 }
