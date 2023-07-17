@@ -3,9 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CoinRateController;
-use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\MailingController;
+use App\Modules\CoinRate\Controllers\CoinRateController;
+use App\Modules\Subscription\Controllers\SubscriptionController;
+use App\Modules\Mailing\Controllers\MailingController;
 
 
 /*

@@ -11,3 +11,23 @@ services:
       - ./conf/nginx/mime.types:/etc/nginx/mime.types
       - ./conf/php-fpm/php-fpm.ini:/etc/php/8.2/fpm/conf.d/90-custom.ini
       - ./www:/var/www
+    networks:
+      - rabbitmq_network
+
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672  
+      - 15672:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq 
+    networks:
+      - rabbitmq_network
+
+volumes:
+  rabbitmq_data: 
+
+networks:
+  rabbitmq_network:
+    external: true
