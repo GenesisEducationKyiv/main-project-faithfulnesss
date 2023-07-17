@@ -15,7 +15,6 @@ RUN apt-get update && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/* /usr/share/man/* /usr/share/doc/* \
     && rm -rf /etc/nginx/sites-enabled
 
-#COPY ./conf/nginx/sites-enabled /etc/nginx/sites-enabled
 COPY ./conf/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 
 COPY ./entrypoint.sh /
